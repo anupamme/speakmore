@@ -45,6 +45,8 @@ async function sha256Of(path) {
 /** 取一份文字（许可原文、原仓库的 NOTICE） */
 async function fetchText(url) {
   const response = await fetch(url, { redirect: "follow" });
+  if (new URL(response.url).hostname !== new URL(url).hostname)
+    throw new Error(`${url} 跳转到了别的域名：${response.url}`);
   if (!response.ok) throw new Error(`取不到 ${url}：HTTP ${response.status}`);
   return response.text();
 }
